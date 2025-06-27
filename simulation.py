@@ -5,8 +5,12 @@ import person
 
 class Main:
     def __init__(self):
-        self.floor_y_coordinate = [21, 37, 53, 69, 85, 101, 117, 133, 149, 165, 181, 197, 213, 229, 245, 261, 277]
-        self.room_x_coordinate = [36, 67, 98, 129, 160, 176, 192, 208, 224, 240, 271, 302, 333, 364, 395]
+        self.floor_y_coordinate = [[261, 276], [245, 260], [229, 244], [213, 228], [197, 212], [181, 196], [165, 180],
+                                   [149, 164], [133, 148], [117, 132], [101, 116], [85, 100], [69, 84], [53, 68],
+                                   [37, 52], [21, 36], [5, 20]]
+        self.room_x_coordinate = [[5, 35], [36, 66], [67, 97], [98, 128], [129, 159], [160, 175], [176, 191],
+                                  [192, 207], [208, 223], [224, 239], [240, 270], [271, 301], [302, 332], [333, 363],
+                                  [364, 394]]
         self.window = tk.Tk()
         self.window.title("Elevator Simulation")
         self.window.geometry("400x285")
@@ -18,6 +22,7 @@ class Main:
         self.populate_elevators()
         self.draw_building()
         self.window.bind("<space>", lambda e: self.spawn_person())
+        self.window.bind("<t>", lambda e: self.tick())
         self.window.mainloop()
 
     def populate_elevators(self):
@@ -42,10 +47,8 @@ class Main:
             elevator.tick()
             self.draw_elevators(elevator)
         for dude in self.people:
-            dude.tick()
+            dude.tick(self.elevators)
             self.draw_people(dude)
-
-
 
     def draw_building(self):
         def rooms(x_block_gap, y_block_gap, block_width, block_height):
