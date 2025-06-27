@@ -32,7 +32,7 @@ class Elevator:
         if self.last_drawing_object != 0:
             canvas.delete(self.last_drawing_object)
 
-        if self.moving:
+        if self.doors_open:
             new_drawing = canvas.create_rectangle(self.x_position, self.y_position, self.x_position + 15,
                                                   self.y_position + 15, fill="green")
         else:

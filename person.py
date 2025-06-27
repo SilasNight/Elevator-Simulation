@@ -51,10 +51,12 @@ class Human:
                     self.button_pushed = True
                     self.press_button(elevators)
                 else:
-                    if elevators[self.elevator_target].floor == self.current_floor:
+                    if (elevators[self.elevator_target].floor == self.current_floor and
+                            elevators[self.elevator_target].doors_open):
                         self.x_position = -10
                         self.y_position = -10
-                    if elevators[self.elevator_target].floor == self.floor:
+                    if (elevators[self.elevator_target].floor == self.floor and
+                            elevators[self.elevator_target].doors_open):
                         self.x_position = elevators[self.elevator_target].x_position
                         self.y_position = elevators[self.elevator_target].y_position + 7
                         self.button_pushed = False
