@@ -9,9 +9,7 @@ class Elevator:
         :param number: unique number of the elevator
         :return:
         """
-        self.floor_y_coordinate = [[261, 276], [245, 260], [229, 244], [213, 228], [197, 212], [181, 196], [165, 180],
-                                   [149, 164], [133, 148], [117, 132], [101, 116], [85, 100], [69, 84], [53, 68],
-                                   [37, 52], [21, 36], [5, 20]]
+        self.floor_y_coordinate = [261, 245, 229, 213, 197, 181, 165, 149, 133, 117, 101, 85, 69, 53, 37, 21, 5]
         self.number = number
         self.floor = 0
         self.moving = False
@@ -21,6 +19,7 @@ class Elevator:
         self.y_position = 261
         self.stops = []
         self.doors_open = False
+        self.doors_open_countdown = 0
 
     def draw(self, canvas: tkinter.Canvas) -> None:
         """
@@ -47,26 +46,33 @@ class Elevator:
         :return:
         """
         if self.doors_open:
+            if self.doors_open_countdown != 0:
+                self.doors_open_countdown -= 1
+                return
             self.doors_open = False
 
         if len(self.stops) != 0:
             current_stop = self.stops[0]
-            if self.floor == current_stop:
+            if self.y_position == self.floor_y_coordinate[current_stop]:
                 self.moving = False
                 self.direction = "None"
                 self.doors_open = True
+                self.doors_open_countdown = 20
                 self.stops.pop(0)
             else:
-                if self.floor < current_stop:
+                if self.y_position < self.floor_y_coordinate[current_stop]:
                     self.moving = True
                     self.direction = "Up"
-                    self.floor += 1
-                    self.y_position = self.floor_y_coordinate[self.floor][0]
-                elif self.floor > current_stop:
+                    self.y_position += 1
+
+                elif self.y_position > self.floor_y_coordinate[current_stop]:
                     self.moving = True
                     self.direction = "Down"
-                    self.floor -= 1
-                    self.y_position = self.floor_y_coordinate[self.floor][0]
+                    self.y_position -= 1
+
+                if self.y_position in self.floor_y_coordinate:
+                    num = self.floor_y_coordinate.index(self.y_position)
+                    self.floor = num
 
 
     def request_check(self, direction: Literal["up","down"] ,originating_floor: int, desired_floor: int) -> dict:
